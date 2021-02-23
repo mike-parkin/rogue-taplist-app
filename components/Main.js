@@ -4,12 +4,13 @@ import {
   View, 
   StyleSheet,
   Text,
-  FlatList
+  ScrollView,
+  Title
   } from 'react-native'
-  import { List, ListItem } from 'react-native-elements'
+
 
 const Main = () => {
-  const [list, setList] = useState({})
+  const [list, setList] = useState(null)
 
   useEffect(() => {
     getTaplist()
@@ -18,28 +19,50 @@ const Main = () => {
       setList(result)
     })
   }, [])
-  // const purveyor = list.Purveyor
-  // const beers = list.Beers
-  // const BeerList = beers[0].Beer
 
   return(
     <View>
-      <Text>{list.name}</Text>
-      <List>
-        <FlatList 
-          data={list.beerlist}
-          renderItem={({ item }) => (
-            <ListItem>
-              <Text>brewery: {item.brewery[0]}</Text>
-              <Text>beerName: {item.name[0]}</Text>
-              <Text>beerStyle: {item.style[0]}</Text>
-            </ListItem>
-          )}
-        />
-      </List>     
+      {list && 
+        <ScrollView>
+          <Text style={styles.title}>{list.name}</Text>
+          {list.beerList.map(beer => {
+            return (
+              <View key={beer.$.id}
+                style={styles.beerItem}
+              >
+                <Text>{beer.Name[0]}</Text>
+                <Text>style: {beer.Style[0]}</Text>
+                <Text>abv: {beer.Abv[0]}%</Text>
+                <Text>
+                  Brewery: {beer.Brewery[0].Name[0]} ({beer.Brewery[0].City[0]})
+                </Text>
+              </View>
+            )
+          })}
+        </ScrollView>
+      }
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  title: {
+    fontSize: 20,
+    marginTop: 25,
+    textAlign: 'center'
+  },
+  beerItem: {
+    marginTop: 5,
+    marginBottom: 5,
+    marginLeft: 10,
+    marginRight: 10,
+    borderWidth: 3,
+    borderColor: 'blue',
+    borderStyle: 'solid',
+    borderRadius: 5
+  }
+
+});
 
 
 
